@@ -38,11 +38,22 @@ jobs:
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: ${{ github.event.inputs.aws_region }}
 
-      - name: Configurar Kubectl para EKS
-        uses: aws-actions/eks-set-context@v4
-        with:
-          cluster-name: ${{ github.event.inputs.eks_cluster_name }}
-          aws-region: ${{ github.event.inputs.aws_region }}
+      - name: Instalar kubectl (si hace falta)
+        run: |
+          if ! command -v kubectl >/dev/null; then
+            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+            chmod +x kubectl
+            sudo mv kubectl /usr/local/bin/
+          fi
+
+      - name: Asegurar aws cli (si hace falta) y configurar kubeconfig para EKS
+        run: |
+          if ! command -v aws >/dev/null; then
+            sudo apt-get update
+            sudo apt-get install -y awscli
+          fi
+          aws --version
+          aws eks --region "${{ github.event.inputs.aws_region }}" update-kubeconfig --name "${{ github.event.inputs.eks_cluster_name }}"
       
       - name: 🔄 Ejecutar Rolling Update (Default)
         if: ${{ github.event.inputs.strategy == 'rolling-update' }}
