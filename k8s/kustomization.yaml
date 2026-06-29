@@ -1,0 +1,3 @@
+# Optional: kustomization to apply all k8s manifests together
+resources:
+  - duoc-app.yaml

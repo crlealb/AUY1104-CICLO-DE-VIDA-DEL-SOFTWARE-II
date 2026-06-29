@@ -1,0 +1,243 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: duoc-app-rolling
+  labels:
+    app: duoc-app
+    version: rolling
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: duoc-app
+      version: rolling
+  template:
+    metadata:
+      labels:
+        app: duoc-app
+        version: rolling
+    spec:
+      containers:
+      - name: duoc-container
+        image: crlealb/AUY1104-CICLO-DE-VIDA-DEL-SOFTWARE-II:latest
+        ports:
+        - containerPort: 3000
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 15
+          periodSeconds: 20
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "250m"
+            memory: "256Mi"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: duoc-app-recreate
+  labels:
+    app: duoc-app
+    version: recreate
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: duoc-app
+      version: recreate
+  template:
+    metadata:
+      labels:
+        app: duoc-app
+        version: recreate
+    spec:
+      containers:
+      - name: duoc-container
+        image: crlealb/AUY1104-CICLO-DE-VIDA-DEL-SOFTWARE-II:latest
+        ports:
+        - containerPort: 3000
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: duoc-app-blue
+  labels:
+    app: duoc-app
+    version: blue
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: duoc-app
+      version: blue
+  template:
+    metadata:
+      labels:
+        app: duoc-app
+        version: blue
+    spec:
+      containers:
+      - name: duoc-container
+        image: crlealb/AUY1104-CICLO-DE-VIDA-DEL-SOFTWARE-II:latest
+        ports:
+        - containerPort: 3000
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: duoc-app-green
+  labels:
+    app: duoc-app
+    version: green
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: duoc-app
+      version: green
+  template:
+    metadata:
+      labels:
+        app: duoc-app
+        version: green
+    spec:
+      containers:
+      - name: duoc-container
+        image: crlealb/AUY1104-CICLO-DE-VIDA-DEL-SOFTWARE-II:latest
+        ports:
+        - containerPort: 3000
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: duoc-app-stable-v1
+  labels:
+    app: duoc-app
+    version: v1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: duoc-app
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: duoc-app
+        version: v1
+    spec:
+      containers:
+      - name: duoc-container
+        image: crlealb/AUY1104-CICLO-DE-VIDA-DEL-SOFTWARE-II:latest
+        ports:
+        - containerPort: 3000
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: duoc-app-canary-v2
+  labels:
+    app: duoc-app
+    version: v2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: duoc-app
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: duoc-app
+        version: v2
+    spec:
+      containers:
+      - name: duoc-container
+        image: crlealb/AUY1104-CICLO-DE-VIDA-DEL-SOFTWARE-II:latest
+        ports:
+        - containerPort: 3000
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: duoc-app-bg-service
+spec:
+  selector:
+    app: duoc-app
+    version: blue
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 3000
+  type: ClusterIP
