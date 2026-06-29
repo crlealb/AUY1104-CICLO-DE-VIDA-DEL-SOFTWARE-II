@@ -7,6 +7,11 @@ metadata:
     version: rolling
 spec:
   replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   selector:
     matchLabels:
       app: duoc-app
@@ -19,29 +24,32 @@ spec:
     spec:
       containers:
       - name: duoc-container
-        image: crlealb/AUY1104-CICLO-DE-VIDA-DEL-SOFTWARE-II:latest
+        image: ghcr.io/crlealb/duoc-app:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 3000
+          name: http
         livenessProbe:
           httpGet:
             path: /
             port: 3000
-          initialDelaySeconds: 15
-          periodSeconds: 20
+          initialDelaySeconds: 20
+          periodSeconds: 15
           failureThreshold: 3
         readinessProbe:
           httpGet:
             path: /
             port: 3000
-          initialDelaySeconds: 5
-          periodSeconds: 10
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          failureThreshold: 3
         resources:
           requests:
             cpu: "100m"
             memory: "128Mi"
           limits:
-            cpu: "250m"
-            memory: "256Mi"
+            cpu: "500m"
+            memory: "512Mi"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -52,6 +60,8 @@ metadata:
     version: recreate
 spec:
   replicas: 2
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: duoc-app
@@ -64,21 +74,32 @@ spec:
     spec:
       containers:
       - name: duoc-container
-        image: crlealb/AUY1104-CICLO-DE-VIDA-DEL-SOFTWARE-II:latest
+        image: ghcr.io/crlealb/duoc-app:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 3000
+          name: http
         livenessProbe:
           httpGet:
             path: /
             port: 3000
-          initialDelaySeconds: 15
-          periodSeconds: 20
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 3
         readinessProbe:
           httpGet:
             path: /
             port: 3000
-          initialDelaySeconds: 5
-          periodSeconds: 10
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          failureThreshold: 3
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -89,6 +110,11 @@ metadata:
     version: blue
 spec:
   replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   selector:
     matchLabels:
       app: duoc-app
@@ -101,21 +127,32 @@ spec:
     spec:
       containers:
       - name: duoc-container
-        image: crlealb/AUY1104-CICLO-DE-VIDA-DEL-SOFTWARE-II:latest
+        image: ghcr.io/crlealb/duoc-app:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 3000
+          name: http
         livenessProbe:
           httpGet:
             path: /
             port: 3000
-          initialDelaySeconds: 15
-          periodSeconds: 20
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 3
         readinessProbe:
           httpGet:
             path: /
             port: 3000
-          initialDelaySeconds: 5
-          periodSeconds: 10
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          failureThreshold: 3
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -126,6 +163,11 @@ metadata:
     version: green
 spec:
   replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   selector:
     matchLabels:
       app: duoc-app
@@ -138,21 +180,32 @@ spec:
     spec:
       containers:
       - name: duoc-container
-        image: crlealb/AUY1104-CICLO-DE-VIDA-DEL-SOFTWARE-II:latest
+        image: ghcr.io/crlealb/duoc-app:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 3000
+          name: http
         livenessProbe:
           httpGet:
             path: /
             port: 3000
-          initialDelaySeconds: 15
-          periodSeconds: 20
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 3
         readinessProbe:
           httpGet:
             path: /
             port: 3000
-          initialDelaySeconds: 5
-          periodSeconds: 10
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          failureThreshold: 3
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -163,6 +216,11 @@ metadata:
     version: v1
 spec:
   replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   selector:
     matchLabels:
       app: duoc-app
@@ -175,21 +233,32 @@ spec:
     spec:
       containers:
       - name: duoc-container
-        image: crlealb/AUY1104-CICLO-DE-VIDA-DEL-SOFTWARE-II:latest
+        image: ghcr.io/crlealb/duoc-app:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 3000
+          name: http
         livenessProbe:
           httpGet:
             path: /
             port: 3000
-          initialDelaySeconds: 15
-          periodSeconds: 20
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 3
         readinessProbe:
           httpGet:
             path: /
             port: 3000
-          initialDelaySeconds: 5
-          periodSeconds: 10
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          failureThreshold: 3
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -200,6 +269,11 @@ metadata:
     version: v2
 spec:
   replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   selector:
     matchLabels:
       app: duoc-app
@@ -212,26 +286,39 @@ spec:
     spec:
       containers:
       - name: duoc-container
-        image: crlealb/AUY1104-CICLO-DE-VIDA-DEL-SOFTWARE-II:latest
+        image: ghcr.io/crlealb/duoc-app:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 3000
+          name: http
         livenessProbe:
           httpGet:
             path: /
             port: 3000
-          initialDelaySeconds: 15
-          periodSeconds: 20
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 3
         readinessProbe:
           httpGet:
             path: /
             port: 3000
-          initialDelaySeconds: 5
-          periodSeconds: 10
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          failureThreshold: 3
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: duoc-app-bg-service
+  labels:
+    app: duoc-app
 spec:
   selector:
     app: duoc-app
@@ -240,4 +327,5 @@ spec:
   - protocol: TCP
     port: 80
     targetPort: 3000
+    name: http
   type: ClusterIP
