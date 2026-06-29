@@ -19,12 +19,18 @@ on:
         description: 'Región de AWS'
         required: true
         default: 'us-east-1'
+      k8s_yaml_path:
+        description: 'Ruta al manifiesto/kustomize/archivo YAML en el repo (ej: k8s/duoc-app-rolling.yaml)'
+        required: true
+        default: 'k8s/duoc-app.yaml'
 
 jobs:
   deploy-strategy:
     runs-on: ubuntu-latest
     permissions:
       contents: read 
+    env:
+      K8S_YAML_PATH: ${{ github.event.inputs.k8s_yaml_path }}
     
     steps:
       - name: Checkout Código
@@ -59,7 +65,7 @@ jobs:
         if: ${{ github.event.inputs.strategy == 'rolling-update' }}
         run: |
           echo "Aplicando YAML para Rolling Update (Actualización gradual)..."
-          kubectl apply -f [K8S-YAML-PATH]
+          kubectl apply -f "$K8S_YAML_PATH"
           kubectl rollout status deployment/duoc-app-rolling --timeout=300s
           echo "✅ Rolling Update completado."
 
@@ -67,7 +73,7 @@ jobs:
         if: ${{ github.event.inputs.strategy == 'recreate' }}
         run: |
           echo "Aplicando YAML para Recreate (All-in-once)..."
-          kubectl apply -f [K8S-YAML-PATH]
+          kubectl apply -f "$K8S_YAML_PATH"
           kubectl rollout status deployment/duoc-app-recreate --timeout=300s
           echo "✅ Recreate completado."
           
@@ -76,7 +82,7 @@ jobs:
         run: |
           DEPLOYMENT_GREEN_NAME="duoc-app-green"
           SERVICE_NAME="duoc-app-bg-service"
-          YAML_FILE_GREEN="[K8S-YAML-PATH]"
+          YAML_FILE_GREEN="$K8S_YAML_PATH"
           
           echo "1. Desplegando el entorno GREEN (Inactivo)..."
           kubectl apply -f $YAML_FILE_GREEN
@@ -96,7 +102,7 @@ jobs:
         run: |
           DEPLOYMENT_CANARY_NAME="duoc-app-canary-v2"
           STABLE_DEPLOYMENT_NAME="duoc-app-stable-v1"
-          YAML_FILE_CANARY="[K8S-YAML-PATH]"
+          YAML_FILE_CANARY="$K8S_YAML_PATH"
           TOTAL_REPLICAS=3
           
           echo "1. Desplegando el entorno CANARY (10% de tráfico)..."
